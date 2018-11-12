@@ -52,9 +52,9 @@
 // These "include"  is needed to define a previous module compilation.
 //************************************************************************
 
-`include "test.sv"
 `include "interface.sv"
 `include "whitebox.sv"
+`include "test.sv"
 
 // This testbench verify with SDRAM TOP
 

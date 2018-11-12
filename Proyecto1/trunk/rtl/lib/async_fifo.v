@@ -40,7 +40,7 @@ later version.
 //-------------------------------------------
 // async FIFO
 //-----------------------------------------------
-//`timescale  1ns/1ps
+`timescale  1ns/1ps
 
 module async_fifo (wr_clk,
                    wr_reset_n,
@@ -81,11 +81,9 @@ module async_fifo (wr_clk,
 
    // synopsys translate_off
 
-   initial begin
-      if (AW == 0) begin
-         $display ("%m : ERROR!!! Fifo depth %d not in range 2 to 256", DP);
-      end // if (AW == 0)
-   end // initial begin
+   initial 
+	assert (!(AW == 0)) else $display ("%m : ERROR!!! Fifo depth %d not in range 2 to 256", DP);
+     
 
    // synopsys translate_on
 
@@ -305,19 +303,23 @@ end
 endfunction
 
 // synopsys translate_off
-always @(posedge wr_clk) begin
-   if (wr_en && full) begin
-      $display($time, "%m Error! afifo overflow!");
-      $stop;
-   end
-end
 
-always @(posedge rd_clk) begin
-   if (rd_en && empty) begin
-      $display($time, "%m error! afifo underflow!");
-      $stop;
-   end
-end
+assert property (@(posedge wr_clk)  disable iff (!(wr_reset_n)) (!(wr_en && full))) 
+     else begin
+      $error($time, "%m Error! afifo overflow!");
+      //$stop;
+      end
+    
+assert property (@(posedge rd_clk) disable iff (!(rd_reset_n)) (!(rd_en && empty))) 
+      else begin
+      $error($time, "%m Error! afifo underflow!");
+      //$stop;
+      end
+
+
+
+
+
 // synopsys translate_on
 
 endmodule

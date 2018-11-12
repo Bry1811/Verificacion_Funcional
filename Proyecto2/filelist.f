@@ -1,0 +1,16 @@
++define+S50 
++define+VERBOSE 
++incdir+trunk/rtl/core 
+trunk/verif/model/IS42VM16400K.V
+trunk/verif/model/mt48lc2m32b2.v 
+trunk/verif/model/mt48lc8m8a2.v  
+trunk/rtl/top/sdrc_top.v 
+trunk/rtl/wb2sdrc/wb2sdrc.v 
+trunk/rtl/lib/async_fifo.v  
+trunk/rtl/core/sdrc_core.v 
+trunk/rtl/core/sdrc_bank_ctl.v 
+trunk/rtl/core/sdrc_bank_fsm.v 
+trunk/rtl/core/sdrc_bs_convert.v 
+trunk/rtl/core/sdrc_req_gen.v 
+trunk/rtl/core/sdrc_xfr_ctl.v 
+tb_top_modified.sv 

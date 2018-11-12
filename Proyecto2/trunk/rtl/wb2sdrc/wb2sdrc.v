@@ -237,18 +237,16 @@ end
      );
 
 // synopsys translate_off
-always @(posedge wb_clk_i) begin
-  if (cmdfifo_full == 1'b1 && cmdfifo_wr == 1'b1)  begin
+assert property ( @(posedge wb_clk_i) disable iff (wb_rst_i) (!(cmdfifo_full == 1'b1 && cmdfifo_wr == 1'b1))) 
+  else begin 
      $display("ERROR:%m COMMAND FIFO WRITE OVERFLOW");
-  end 
-end 
+  end
 // synopsys translate_on
 // synopsys translate_off
-always @(posedge sdram_clk) begin
-   if (cmdfifo_empty == 1'b1 && cmdfifo_rd == 1'b1) begin
+assert property ( @(posedge sdram_clk) disable iff (~sdram_resetn) (!(cmdfifo_empty == 1'b1 && cmdfifo_rd == 1'b1)))
+	 else begin
       $display("ERROR:%m COMMAND FIFO READ OVERFLOW");
    end
-end 
 // synopsys translate_on
 
 //---------------------------------------------------------------------
@@ -293,17 +291,12 @@ wire  wrdatafifo_rd  = sdr_wr_next;
                                 sdr_wr_data}      )
      );
 // synopsys translate_off
-always @(posedge wb_clk_i) begin
-  if (wrdatafifo_full == 1'b1 && wrdatafifo_wr == 1'b1)  begin
+  assert property ( @(posedge wb_clk_i) disable iff (wb_rst_i) (!(wrdatafifo_full == 1'b1 && wrdatafifo_wr == 1'b1)))  else
      $display("ERROR:%m WRITE DATA FIFO WRITE OVERFLOW");
-  end 
-end 
 
-always @(posedge sdram_clk) begin
-   if (wrdatafifo_empty == 1'b1 && wrdatafifo_rd == 1'b1) begin
+   assert property ( @(posedge sdram_clk)disable iff (!sdram_resetn) (!(wrdatafifo_empty == 1'b1 && wrdatafifo_rd == 1'b1))) else
       $display("ERROR:%m WRITE DATA FIFO READ OVERFLOW");
-   end
-end 
+ 
 // synopsys translate_on
 
 // -------------------------------------------------------------------
@@ -355,16 +348,14 @@ wire    rddatafifo_rd = wb_ack_o & !wb_we_i;
 
 // synopsys translate_off
 always @(posedge sdram_clk) begin
-  if (rddatafifo_full == 1'b1 && rddatafifo_wr == 1'b1)  begin
+   assert property (disable iff (wb_rst_i) (!(rddatafifo_full == 1'b1 && rddatafifo_wr == 1'b1))) else
      $display("ERROR:%m READ DATA FIFO WRITE OVERFLOW");
-  end 
-end 
+  end
 
 always @(posedge wb_clk_i) begin
-   if (rddatafifo_empty == 1'b1 && rddatafifo_rd == 1'b1) begin
+   assert property (disable iff (!(sdram_resetn)) (!(rddatafifo_empty == 1'b1 && rddatafifo_rd == 1'b1))) else
       $display("ERROR:%m READ DATA FIFO READ OVERFLOW");
    end
-end 
 // synopsys translate_on
 
  

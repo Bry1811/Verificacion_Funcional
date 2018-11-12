@@ -311,20 +311,20 @@ parameter  SDR_BW   = 2;   // SDR Byte Width
    // FIFO Check
 
    // synopsys translate_off
+   
+assert property (@(posedge clk) disable iff (!(reset_n)) (!(~rank_fifo_wr & rank_fifo_rd && rank_cnt == 3'h0)))
+	else begin
+	 $error ("%t: %m: ERROR!!! Read from empty Fifo", $time);
+	 //$stop;
+    end // if (rank_fifo_rd && rank_cnt == 3'h0)
 
-   always @ (posedge clk) begin
-
-      if (~rank_fifo_wr & rank_fifo_rd && rank_cnt == 3'h0) begin
-	 $display ("%t: %m: ERROR!!! Read from empty Fifo", $time);
-	 $stop;
-      end // if (rank_fifo_rd && rank_cnt == 3'h0)
-
-      if (rank_fifo_wr && ~rank_fifo_rd && rank_cnt == 3'h4) begin
-	 $display ("%t: %m: ERROR!!! Write to full Fifo", $time);
-	 $stop;
-      end // if (rank_fifo_wr && ~rank_fifo_rd && rank_cnt == 3'h4)
-      
-   end // always @ (posedge clk)
+   assert property(@(posedge clk) disable iff (!(reset_n))(!(rank_fifo_wr && ~rank_fifo_rd && rank_cnt == 3'h4)))	
+	 else begin
+	 $error ("%t: %m: ERROR!!! Write to full Fifo", $time);
+	 //$stop;
+         end // if (rank_fifo_wr && ~rank_fifo_rd && rank_cnt == 3'h4)
+ 
+ // always @ (posedge clk)
    
    // synopsys translate_on
       

@@ -41,10 +41,13 @@ class driver;
 	//--------------------------------------------
 	// New function to create a driver block
 	//--------------------------------------------
-		function new(virtual bus_interface driver_interface,scoreboard new_scoreboard_ext);
+		function new(virtual bus_interface driver_interface,scoreboard new_scoreboard_ext, stimulus1 ext_stimulus1, stimulus2 ext_stimulus2, stimulus3 ext_stimulus3);
 			begin
 			this.driver_interface = driver_interface;
 			this.new_scoreboard = new_scoreboard_ext;
+			this.new_stimulus1 = ext_stimulus1;
+			this.new_stimulus2 = ext_stimulus2;
+			this.new_stimulus3 = ext_stimulus3;
 			end
 		endfunction
 	

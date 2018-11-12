@@ -22,14 +22,13 @@
 // These "include"  is needed to define a previous module compilation.
 //************************************************************************
 
-`include "environment.sv"
 `include "scoreboard.sv"
-`include "driver.sv"
 `include "monitor.sv"
 `include "stimulus1.sv"
 `include "stimulus2.sv"
 `include "stimulus3.sv"
 `include "assertion.sv"
+`include "driver.sv"
 
 class environment2 extends environment;
 

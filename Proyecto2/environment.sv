@@ -26,6 +26,9 @@ class environment;
 	driver tb_driver;
 	monitor tb_monitor;
 	scoreboard tb_scoreboard;
+	stimulus1 tb_stimulus1;
+	stimulus2 tb_stimulus2;
+	stimulus3 tb_stimulus3;
 
 	virtual bus_interface environment_interface;
 
@@ -33,8 +36,11 @@ class environment;
 	begin
 		this.tb_scoreboard=new();
 		this.environment_interface = environment_interface;
+		this.tb_stimulus1=new();
+		this.tb_stimulus2=new();
+		this.tb_stimulus3=new();
 		this.tb_driver=new(this.environment_interface,this.tb_scoreboard);
-		this.tb_monitor=new(this.environment_interface,this.tb_scoreboard);
+		this.tb_monitor=new(this.environment_interface,this.tb_scoreboard,this.tb_stimulus1,this.tb_stimulus2,this.tb_stimulus3);
 	end
 	endfunction
 

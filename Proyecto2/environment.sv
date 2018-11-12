@@ -39,8 +39,8 @@ class environment;
 		this.tb_stimulus1=new();
 		this.tb_stimulus2=new();
 		this.tb_stimulus3=new();
-		this.tb_driver=new(this.environment_interface,this.tb_scoreboard);
-		this.tb_monitor=new(this.environment_interface,this.tb_scoreboard,this.tb_stimulus1,this.tb_stimulus2,this.tb_stimulus3);
+		this.tb_monitor=new(this.environment_interface,this.tb_scoreboard);
+		this.tb_driver=new(this.environment_interface,this.tb_scoreboard,this.tb_stimulus1,this.tb_stimulus2,this.tb_stimulus3);
 	end
 	endfunction
 

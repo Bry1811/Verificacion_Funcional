@@ -59,7 +59,7 @@ class monitor;
 
 	begin
 		new_scoreboard.read_afifo_bfifo(Address,bl,size_fifo);
-		read_dfifo
+		
 		@ (negedge monitor_interface.sys_clk);
 			for(j=0; j < bl; j++) begin
 				monitor_interface.wb_stb_i        = 1;
@@ -67,7 +67,7 @@ class monitor;
 				monitor_interface.wb_we_i         = 0;
 				monitor_interface.wb_addr_i       = Address[31:2]+j;
 
-				exp_data        = new_scoreboard.dfifo.pop_front(); // Exptected Read Data
+				new_scoreboard.read_dfifo(size_fifo,exp_data); // Exptected Read Data
 				do begin
 					@ (posedge monitor_interface.sys_clk);
 				end while(monitor_interface.wb_ack_o == 1'b0);

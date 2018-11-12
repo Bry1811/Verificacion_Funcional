@@ -29,20 +29,19 @@
 `include "stimulus3.sv"
 `include "assertion.sv"
 `include "driver.sv"
+`include "environment.sv"
 
 class environment2 extends environment;
 
 	virtual bus_interface environment2_interface;
 	virtual whitebox whitebox_interface;
-	
-	assertion tb_assertion;
 
 	function new(virtual bus_interface environment2_interface,virtual whitebox whitebox_interface);
 	begin
 		this.environment2_interface = environment2_interface;
 		this.whitebox_interface = whitebox_interface;
 		super.new(environment2_interface);
-		tb_assertion(whitebox_interface);
+		assertions tb_assertion(whitebox_interface);
 	end
 	endfunction
 

@@ -22,18 +22,33 @@ class scoreboard;
 //-------------------------------------
 	integer param_random;
 	integer size_fifo;
+	parameter size_array = 100;
+	integer order_size_write;
+	integer order_size_read;
 	
-	int dfifo[size_fifo]; // data fifo
-	int afifo[size_fifo]; // address  fifo
-	int bfifo[size_fifo]; // Burst Length fifo
+	int dfifo[size_array]; // data fifo
+	int afifo[size_array]; // address  fifo
+	int bfifo[size_array]; // Burst Length fifo
 	
-	task write_afifo_bfifo(input logic [31:0] Address, logic [7:0]  bl, output integer fifo_size);
+	// task write_order_size(input integer ext_order_size_write);
+		// begin
+			// order_size_write = ext_order_size_write;
+		// end
+	// endtask
+	
+	// task read_order_size(input integer ext_order_size_read);
+		// begin
+			// order_size_read = ext_order_size_read;
+		// end
+	// endtask
+	
+	task write_afifo_bfifo(input logic [31:0] Address, input logic [7:0]  b1, output integer fifo_size);
 		begin
 			param_random = $urandom_range(0,1);
-			$display("Random Parameter for Scoreboard Writting: %d ",param_random);
+			$display("Random Parameter for Scoreboard Writing: %d ",param_random);
 			if(param_random == 1)
 			begin
-				size_fifo = $urandom_range(0,24);
+				size_fifo = $urandom_range(0,100);
 				fifo_size = size_fifo;
 				afifo[size_fifo] = Address;
 				bfifo[size_fifo] = b1;
@@ -41,8 +56,10 @@ class scoreboard;
 			
 			else
 			begin
-				afifo.push_back(Address);
-				bfifo.push_back(b1);
+				afifo[order_size_write] = Address;
+				bfifo[order_size_write] = b1;
+				fifo_size = order_size_write;
+				order_size_write = order_size_write + 1;
 			end
 		end
 	endtask
@@ -60,7 +77,7 @@ class scoreboard;
 			$display("Random Parameter for Scoreboard Reading: %d ",param_random);
 			if(param_random == 1)
 			begin
-				size_fifo = $urandom_range(0,24);
+				size_fifo = $urandom_range(0,100);
 				fifo_size = size_fifo;
 				Address = afifo[size_fifo];
 				b1 = bfifo[size_fifo];
@@ -70,8 +87,12 @@ class scoreboard;
 			
 			else
 			begin
-				Address = afifo.pop_front();
-				b1 = bfifo.pop_front();
+				Address = afifo[order_size_read];
+				b1 = bfifo[order_size_read];
+				afifo.delete(order_size_read);
+				bfifo.delete(order_size_read);
+				fifo_size = order_size_read;
+				order_size_read = order_size_read + 1;
 			end
 		end
 	endtask
@@ -80,6 +101,7 @@ class scoreboard;
 		begin
 			size_fifo = fifo_write;
 			write_data = dfifo[size_fifo];
+			dfifo.delete(size_fifo);
 		end
 	endtask
 	

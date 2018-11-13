@@ -29,13 +29,6 @@
 
 program test(bus_interface test_interface, whitebox test_whitebox);
 
-//--------------------
-// data/address/burst length FIFO
-//--------------------
-int dfifo[$]; // data fifo
-int afifo[$]; // address  fifo
-int bfifo[$]; // Burst Length fifo
-
 reg [31:0] read_data;
 int k;
 reg [31:0] StartAddr;

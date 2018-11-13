@@ -63,6 +63,8 @@ class driver;
 	   driver_interface.wb_stb_i       = 0;
 	   driver_interface.wb_cyc_i       = 0;
 	   driver_interface.RESETN    = 1'h1;
+	   new_scoreboard.order_size_read = 0;
+	   new_scoreboard.order_size_write = 0;
 
 	   #100
 	   // Applying reset

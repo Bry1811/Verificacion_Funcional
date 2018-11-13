@@ -27,34 +27,9 @@
 `include "stimulus1.sv"
 `include "stimulus2.sv"
 `include "stimulus3.sv"
-`include "assertion.sv"
 `include "driver.sv"
-//`include "environment.sv"
-
-class environment;
-
-	driver tb_driver;
-	monitor tb_monitor;
-	scoreboard tb_scoreboard;
-	stimulus1 tb_stimulus1;
-	stimulus2 tb_stimulus2;
-	stimulus3 tb_stimulus3;
-
-	virtual bus_interface environment_interface;
-
-	function new(virtual bus_interface environment_interface);
-	begin
-		this.tb_scoreboard=new();
-		this.environment_interface = environment_interface;
-		this.tb_stimulus1=new();
-		this.tb_stimulus2=new();
-		this.tb_stimulus3=new();
-		this.tb_monitor=new(this.environment_interface,this.tb_scoreboard);
-		this.tb_driver=new(this.environment_interface,this.tb_scoreboard,this.tb_stimulus1,this.tb_stimulus2,this.tb_stimulus3);
-	end
-	endfunction
-
-endclass
+`include "environment.sv"
+//`include "assertion.sv"
 
 class environment2 extends environment;
 

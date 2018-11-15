@@ -35,7 +35,7 @@ class environment2 extends environment;
 
 	virtual bus_interface environment2_interface;
 	virtual whitebox whitebox_interface;
-	assertions tb_assertion(whitebox_interface);
+	//assertions tb_assertion(whitebox_interface);
 
 	function new(virtual bus_interface environment2_interface,virtual whitebox whitebox_interface);
 	begin

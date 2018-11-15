@@ -25,83 +25,97 @@ class scoreboard;
 	parameter size_array = 100;
 	integer order_size_write;
 	integer order_size_read;
+	integer num_bl;
+	integer rep;
+	integer repeated;
+	integer new_loc;
 	
-	int dfifo[size_array]; // data fifo
+	int dfifo[size_array] [255]; // data fifo
 	int afifo[size_array]; // address  fifo
 	int bfifo[size_array]; // Burst Length fifo
+	int unpacked[];
 	
-	// task write_order_size(input integer ext_order_size_write);
-		// begin
-			// order_size_write = ext_order_size_write;
-		// end
-	// endtask
-	
-	// task read_order_size(input integer ext_order_size_read);
-		// begin
-			// order_size_read = ext_order_size_read;
-		// end
-	// endtask
-	
-	task write_afifo_bfifo(input logic [31:0] Address, input logic [7:0]  b1, output integer fifo_size);
+	task write_afifo_bfifo(input logic [31:0] Address, input logic [7:0]  bl, output integer fifo_size);
 		begin
-			param_random = $urandom_range(0,1);
-			$display("Random Parameter for Scoreboard Writing: %d ",param_random);
-			if(param_random == 1)
+			for(rep=0; rep <= size_array-1; rep++)
 			begin
-				size_fifo = $urandom_range(0,100);
+				if(afifo[rep] == Address)
+				begin
+					repeated = 1;
+					new_loc = rep;
+				end
+				else
+				begin
+					repeated = repeated;
+				end
+			end
+			if(repeated == 1)
+			begin
+				size_fifo = new_loc;
 				fifo_size = size_fifo;
 				afifo[size_fifo] = Address;
-				bfifo[size_fifo] = b1;
+				bfifo[size_fifo] = bl;
+				repeated = 0;
 			end
-			
 			else
-			begin
-				afifo[order_size_write] = Address;
-				bfifo[order_size_write] = b1;
-				fifo_size = order_size_write;
-				order_size_write = order_size_write + 1;
+			begin			
+				param_random = $urandom_range(0,1);
+				//param_random = 1;
+				$display("Random Parameter for Scoreboard Writing: %d ",param_random);
+				if(param_random == 1)
+				begin
+					size_fifo = $urandom_range(0,size_array-1);
+					fifo_size = size_fifo;
+					afifo[size_fifo] = Address;
+					bfifo[size_fifo] = bl;
+				end
+			
+				else
+				begin
+					afifo[order_size_write] = Address;
+					bfifo[order_size_write] = bl;
+					fifo_size = order_size_write;
+					order_size_write = order_size_write + 1;
+				end	
 			end
 		end
 	endtask
 	
-	task write_dfifo(logic [31:0] write_data, integer fifo_write);
+	task write_dfifo(logic [31:0] write_data, integer cur_ind, integer fifo_write);
 		begin
 			size_fifo = fifo_write;
-			dfifo[size_fifo] = write_data;
+			dfifo[size_fifo][cur_ind] = write_data;
+			$display("WriteData: %x Size_Fifo %d",dfifo[size_fifo][cur_ind],size_fifo);
 		end
 	endtask
 	
 	task read_afifo_bfifo(output logic [31:0] Address, output logic [7:0]  bl, output integer fifo_size);
 		begin
 			param_random = $urandom_range(0,1);
+			//param_random = 1;
 			$display("Random Parameter for Scoreboard Reading: %d ",param_random);
 			if(param_random == 1)
 			begin
-				size_fifo = $urandom_range(0,100);
+				size_fifo = $urandom_range(0,size_array-1);
 				fifo_size = size_fifo;
 				Address = afifo[size_fifo];
-				b1 = bfifo[size_fifo];
-				afifo.delete(size_fifo);
-				bfifo.delete(size_fifo);
+				bl = bfifo[size_fifo];
 			end
 			
 			else
 			begin
 				Address = afifo[order_size_read];
-				b1 = bfifo[order_size_read];
-				afifo.delete(order_size_read);
-				bfifo.delete(order_size_read);
+				bl = bfifo[order_size_read];
 				fifo_size = order_size_read;
 				order_size_read = order_size_read + 1;
 			end
 		end
-	endtask
-	
-	task read_dfifo(input integer fifo_write, output logic [31:0] write_data);
+	endtask	
+
+	task read_dfifo(input integer fifo_write, integer cur_ind, output logic [31:0] write_data);
 		begin
 			size_fifo = fifo_write;
-			write_data = dfifo[size_fifo];
-			dfifo.delete(size_fifo);
+			write_data = dfifo[size_fifo][cur_ind];
 		end
 	endtask
 	

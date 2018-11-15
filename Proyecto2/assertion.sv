@@ -68,3 +68,5 @@ endproperty
 
 assertion_initialization: assert property (initialization) $display( "%t: SDRAM initialization has done successfully!!", $time);
 else $error("Initialization has failed!");
+
+endmodule

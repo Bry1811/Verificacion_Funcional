@@ -98,7 +98,7 @@ class driver;
 			driver_interface.wb_sel_i        = 4'b1111;
 			driver_interface.wb_addr_i       = Address[31:2]+i;
 			driver_interface.wb_dat_i        = $random & 32'hFFFFFFFF;
-			new_scoreboard.write_dfifo(driver_interface.wb_dat_i,size_fifo);
+			new_scoreboard.write_dfifo(driver_interface.wb_dat_i,i,size_fifo);
 
 			do begin
 				@ (posedge driver_interface.sys_clk);
@@ -135,7 +135,7 @@ class driver;
 	//---------------------------------------------------------------
 	// Write random column address in SDRAM with defined row and bank
 	//---------------------------------------------------------------
-	task burst_write_random_column();
+	task burst_write_random_column(logic [11:0] row, logic [1:0] bank);
 		void'(new_stimulus3.randomize());
 		this.burst_write({row,bank,new_stimulus3.column,2'b00},new_stimulus3.bl);
 	endtask

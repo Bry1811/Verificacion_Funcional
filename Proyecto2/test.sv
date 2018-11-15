@@ -68,6 +68,7 @@ initial begin //{
   $display("----------------------------------------");
   tb_environment.tb_driver.burst_write_page_crossover();  
   tb_environment.tb_driver.burst_write_page_crossover();  
+ /*  tb_environment.tb_driver.burst_write_page_crossover();  
   tb_environment.tb_driver.burst_write_page_crossover();  
   tb_environment.tb_driver.burst_write_page_crossover();  
   tb_environment.tb_driver.burst_write_page_crossover();  
@@ -88,8 +89,10 @@ initial begin //{
   tb_environment.tb_driver.burst_write_page_crossover();  
   tb_environment.tb_driver.burst_write_page_crossover();  
   tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
+  tb_environment.tb_driver.burst_write_page_crossover();   */
+  tb_environment.tb_monitor.burst_read();  
+  tb_environment.tb_monitor.burst_read();  
+/*   tb_environment.tb_monitor.burst_read();  
   tb_environment.tb_monitor.burst_read();  
   tb_environment.tb_monitor.burst_read();  
   tb_environment.tb_monitor.burst_read();  
@@ -110,22 +113,19 @@ initial begin //{
   tb_environment.tb_monitor.burst_read();  
   tb_environment.tb_monitor.burst_read();  
   tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
+  tb_environment.tb_monitor.burst_read();   */
 
   $display("----------------------------------------");
   $display(" Case:4 4 Write & 4 Read                ");
   $display("----------------------------------------");
   tb_environment.tb_driver.burst_write_random();  
   tb_environment.tb_driver.burst_write_random();  
-  tb_environment.tb_driver.burst_write_random();  
-  tb_environment.tb_driver.burst_write_random();  
+ // tb_environment.tb_driver.burst_write_random();  
+ // tb_environment.tb_driver.burst_write_random();  
   tb_environment.tb_monitor.burst_read();  
   tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
+  //tb_environment.tb_monitor.burst_read();  
+  //tb_environment.tb_monitor.burst_read();  
 
   $display("---------------------------------------");
   $display(" Case:5 24 Write & 24 Read With Different Bank and Row ");
@@ -137,12 +137,30 @@ initial begin //{
   //
   tb_environment.tb_driver.burst_write_random_column(12'h000,2'b00);   // Row: 0 Bank : 0
   tb_environment.tb_driver.burst_write_random_column(12'h000,2'b01);   // Row: 0 Bank : 1
-  tb_environment.tb_driver.burst_write_random_column(12'h000,2'b10);   // Row: 0 Bank : 2
-  tb_environment.tb_driver.burst_write_random_column(12'h000,2'b11);   // Row: 0 Bank : 3
-  tb_environment.tb_driver.burst_write_random_column(12'h001,2'b00);   // Row: 1 Bank : 0
-  tb_environment.tb_driver.burst_write_random_column(12'h001,2'b01);   // Row: 1 Bank : 1
-  tb_environment.tb_driver.burst_write_random_column(12'h001,2'b10);   // Row: 1 Bank : 2
-  tb_environment.tb_driver.burst_write_random_column(12'h001,2'b11);   // Row: 1 Bank : 3
+  // tb_environment.tb_driver.burst_write_random_column(12'h000,2'b10);   // Row: 0 Bank : 2
+  // tb_environment.tb_driver.burst_write_random_column(12'h000,2'b11);   // Row: 0 Bank : 3
+  // tb_environment.tb_driver.burst_write_random_column(12'h001,2'b00);   // Row: 1 Bank : 0
+  // tb_environment.tb_driver.burst_write_random_column(12'h001,2'b01);   // Row: 1 Bank : 1
+  // tb_environment.tb_driver.burst_write_random_column(12'h001,2'b10);   // Row: 1 Bank : 2
+  // tb_environment.tb_driver.burst_write_random_column(12'h001,2'b11);   // Row: 1 Bank : 3
+  tb_environment.tb_monitor.burst_read();  
+  tb_environment.tb_monitor.burst_read();  
+/*   tb_environment.tb_monitor.burst_read();  
+  tb_environment.tb_monitor.burst_read();  
+  tb_environment.tb_monitor.burst_read();  
+  tb_environment.tb_monitor.burst_read();  
+  tb_environment.tb_monitor.burst_read();  
+  tb_environment.tb_monitor.burst_read();  
+
+  tb_environment.tb_driver.burst_write_random_column(12'h002,2'b00);   // Row: 2 Bank : 0
+  tb_environment.tb_driver.burst_write_random_column(12'h002,2'b01);   // Row: 2 Bank : 1
+  tb_environment.tb_driver.burst_write_random_column(12'h002,2'b10);   // Row: 2 Bank : 2
+  tb_environment.tb_driver.burst_write_random_column(12'h002,2'b11);   // Row: 2 Bank : 3
+  tb_environment.tb_driver.burst_write_random_column(12'h003,2'b00);   // Row: 3 Bank : 0
+  tb_environment.tb_driver.burst_write_random_column(12'h003,2'b01);   // Row: 3 Bank : 1
+  tb_environment.tb_driver.burst_write_random_column(12'h003,2'b10);   // Row: 3 Bank : 2
+  tb_environment.tb_driver.burst_write_random_column(12'h003,2'b11);   // Row: 3 Bank : 3
+
   tb_environment.tb_monitor.burst_read();  
   tb_environment.tb_monitor.burst_read();  
   tb_environment.tb_monitor.burst_read();  
@@ -168,25 +186,7 @@ initial begin //{
   tb_environment.tb_monitor.burst_read();  
   tb_environment.tb_monitor.burst_read();  
   tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-
-  tb_environment.tb_driver.burst_write_random_column(12'h002,2'b00);   // Row: 2 Bank : 0
-  tb_environment.tb_driver.burst_write_random_column(12'h002,2'b01);   // Row: 2 Bank : 1
-  tb_environment.tb_driver.burst_write_random_column(12'h002,2'b10);   // Row: 2 Bank : 2
-  tb_environment.tb_driver.burst_write_random_column(12'h002,2'b11);   // Row: 2 Bank : 3
-  tb_environment.tb_driver.burst_write_random_column(12'h003,2'b00);   // Row: 3 Bank : 0
-  tb_environment.tb_driver.burst_write_random_column(12'h003,2'b01);   // Row: 3 Bank : 1
-  tb_environment.tb_driver.burst_write_random_column(12'h003,2'b10);   // Row: 3 Bank : 2
-  tb_environment.tb_driver.burst_write_random_column(12'h003,2'b11);   // Row: 3 Bank : 3
-
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
+  tb_environment.tb_monitor.burst_read();  */
   $display("---------------------------------------------------");
   $display(" Case: 6 Random 2 write and 2 read random");
   $display("---------------------------------------------------");

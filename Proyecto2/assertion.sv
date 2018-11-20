@@ -71,7 +71,7 @@ property rule300_prop;
 endproperty
 
 property rule305_prop;
-  @ (posedge whitebox.sys_clk) 
+  @ (whitebox.sys_clk) 
       $rose(whitebox.reset)   |=> (($past(whitebox.sys_clk,1) && whitebox.reset && !whitebox.sys_clk) or ($past(!whitebox.sys_clk,1) && whitebox.reset && whitebox.sys_clk));
 endproperty
 

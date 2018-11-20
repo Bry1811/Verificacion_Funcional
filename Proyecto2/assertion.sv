@@ -46,7 +46,7 @@ module assertions(whitebox whitebox);
 
 sequence inhibit_or_nop;
 //CLK Period = 20 ns por tanto 100us / 20ns = 5000 ciclos
-	## [1:5000]  ((whitebox.cs) || (whitebox.ras && whitebox.cas && whitebox.we)) [*1:$];
+	## [1:5000]  ((whitebox.cs) || (whitebox.ras && whitebox.cas && whitebox.we));// [*1:$];
 endsequence
 
 sequence precharge_init;
@@ -61,6 +61,9 @@ sequence load_mode_reg;
 	(~whitebox.cs && ~whitebox.ras && ~whitebox.cas && ~whitebox.we ) [=1];
 endsequence
 
+sequence rule335_seq;
+	(whitebox.cyc_o && whitebox.stb_o);
+endsequence
 
 property rule300_prop;
   @ (posedge whitebox.sys_clk) 
@@ -72,6 +75,16 @@ property rule305_prop;
       $rose(whitebox.reset)   |=> (($past(whitebox.sys_clk,1) && whitebox.reset && !whitebox.sys_clk) or ($past(!whitebox.sys_clk,1) && whitebox.reset && whitebox.sys_clk));
 endproperty
 
+property rule325_prop;
+	@ (posedge whitebox.sys_clk) 
+		($rose(whitebox.cyc_o)   |=> whitebox.stb_o == 1) or ($fell(whitebox.cyc_o)   |=> whitebox.stb_o ==0);	
+endproperty
+
+property rule335_prop;
+	@ (posedge whitebox.sys_clk) 
+		$rose(whitebox.ack_o)   |=> rule335_seq;	
+endproperty
+	
 property initialization;
 	@(posedge whitebox.clk)
 		$fell(whitebox.reset_n) |=> (inhibit_or_nop and precharge_init) |=> auto_refresh |=> load_mode_reg; 
@@ -90,5 +103,11 @@ always @(whitebox.reset) begin
 rule310_assert : assert ((whitebox.reset && !whitebox.resetRAM) || (!whitebox.reset && whitebox.resetRAM) )$display( "%t: Rule 3.10 has check successfully!!", $time);
 else $error("Rule 3.10 has check unsuccessfully!");
 end
+
+rule325_assert : assert property (rule325_prop)$display;//( "%t: Rule 3.25 has check successfully!!", $time);
+else $error("Rule 3.25 has check unsuccessfully!");
+
+rule335_assert : assert property (rule335_prop)$display;//( "%t: Rule 3.35 has check successfully!!", $time);
+else $error("Rule 3.35 has check unsuccessfully!");
 
 endmodule

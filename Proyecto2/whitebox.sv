@@ -40,6 +40,9 @@ interface whitebox();
 	logic reset;
 	logic resetRAM;
 	logic sys_clk;
+	logic cyc_o;
+	logic stb_o;
+	logic ack_o;
 
 	assign cke = `DUT.sdr_cke;
 	assign cs = `DUT.sdr_cs_n;
@@ -54,13 +57,16 @@ interface whitebox();
 	assign cfg_sdr_rfsh = `DUT.cfg_sdr_rfsh;
 	assign x2b_refresh = `DUT.u_xfr_ctl.x2b_refresh;
 	assign page_ovflw =`DUT.u_req_gen.page_ovflw;
-	assign dq = tb_top.u_sdram8.Dq;
+	assign dq = tb_top.u_sdram16.dq;
   	assign rfsh_row_cnt = `DUT.u_xfr_ctl.rfsh_row_cnt;
   	assign rfsh_timer = `DUT.u_xfr_ctl.rfsh_timer;
   	assign rfsh_time = `DUT.u_req_gen.max_r2b_len;
 	assign req_len_int = `DUT.u_req_gen.req_len_int;
 	assign reset= tb_top.u_dut.wb_rst_i; 
 	assign resetRAM= tb_top.u_dut.sdram_resetn;
-	assign sys_clk = tb_top.u_dut.wb_clk_i; 	
+	assign sys_clk = tb_top.u_dut.wb_clk_i; 
+	assign cyc_o = tb_top.u_dut.wb_cyc_i;
+	assign stb_o = tb_top.u_dut.wb_stb_i;
+	assign ack_o = tb_top.u_dut.wb_ack_o;	
 	
 endinterface

@@ -57,6 +57,8 @@
 `include "assertion.sv"
 `include "test.sv"
 
+//`define SDR_16BIT 1
+
 // This testbench verify with SDRAM TOP
 
 module tb_top;

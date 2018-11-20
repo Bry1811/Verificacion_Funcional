@@ -1,4 +1,5 @@
 +define+S50 
++define+SDR_16BIT
 +define+VERBOSE 
 +incdir+trunk/rtl/core 
 trunk/verif/model/IS42VM16400K.V

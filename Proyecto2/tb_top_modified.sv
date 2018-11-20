@@ -54,6 +54,7 @@
 
 `include "interface.sv"
 `include "whitebox.sv"
+`include "assertion.sv"
 `include "test.sv"
 
 // This testbench verify with SDRAM TOP
@@ -189,6 +190,8 @@ mt48lc8m8a2 #(.data_bits(8)) u_sdram8 (
           .Dqm                (main_interface.sdr_dqm            )
      );
 `endif
+
+assertions tb_assertion(whitebox_interface);
 
 test main_tb(main_interface,whitebox_interface);
 

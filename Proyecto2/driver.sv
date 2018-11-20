@@ -69,7 +69,7 @@ class driver;
 	   #100
 	   // Applying reset
 	   driver_interface.RESETN    = 1'h0;
-	   #10000;
+	   #100000;
 	   // Releasing reset
 	   driver_interface.RESETN    = 1'h1;
 

@@ -38,8 +38,8 @@ module assertions(whitebox whitebox);
 //-------------------------------------------	
 //COMMAND INHIBIT  	||  H  |  X  |  X  |  X  |
 //NOP              	||  L  |  H  |  H  |  H  |
-//ACTIVE			||  L  |  L  |  H  |  H  |
-//AUTO_REFRESH     	||  L  |  L	 |  L  |  H  |
+//ACTIVE		||  L  |  L  |  H  |  H  |
+//AUTO_REFRESH     	||  L  |  L  |  L  |  H  |
 //PRECHARGE        	||  L  |  L  |  H  |  L  |
 //LOAD_MOD_REG     	||  L  |  L  |  L  |  L  |
 //--------------------------------------------
@@ -61,6 +61,17 @@ sequence load_mode_reg;
 	(~whitebox.cs && ~whitebox.ras && ~whitebox.cas && ~whitebox.we ) [=1];
 endsequence
 
+
+property rule300_prop;
+  @ (posedge whitebox.sys_clk) 
+      whitebox.reset  |=> (!$isunknown(whitebox.cs) and !$isunknown(whitebox.we) and !$isunknown(whitebox.ras) and !$isunknown(whitebox.cas));
+endproperty
+
+property rule305_prop;
+  @ (posedge whitebox.sys_clk) 
+      $rose(whitebox.reset)   |=> (($past(whitebox.sys_clk,1) && whitebox.reset && !whitebox.sys_clk) or ($past(!whitebox.sys_clk,1) && whitebox.reset && whitebox.sys_clk));
+endproperty
+
 property initialization;
 	@(posedge whitebox.clk)
 		$fell(whitebox.reset_n) |=> (inhibit_or_nop and precharge_init) |=> auto_refresh |=> load_mode_reg; 
@@ -68,5 +79,16 @@ endproperty
 
 assertion_initialization: assert property (initialization) $display( "%t: SDRAM initialization has done successfully!!", $time);
 else $error("Initialization has failed!");
+
+rule300_assert : assert property (rule300_prop)$display;//( "%t: Rule 3.00 has check successfully!!", $time);
+else $error("Rule 3.00 has check unsuccessfully!");
+
+rule305_assert : assert property (rule305_prop)$display( "%t: Rule 3.05 has check successfully!!", $time);
+else $error("Rule 3.05 has check unsuccessfully!");
+
+always @(whitebox.reset) begin 
+rule310_assert : assert ((whitebox.reset && !whitebox.resetRAM) || (!whitebox.reset && whitebox.resetRAM) )$display( "%t: Rule 3.10 has check successfully!!", $time);
+else $error("Rule 3.10 has check unsuccessfully!");
+end
 
 endmodule

@@ -58,7 +58,7 @@ later version.
                                                               
 *******************************************************************/
 
-`timescale  1ns/1ps
+
 `include "sdrc_define.v"
 module sdrc_top 
            (

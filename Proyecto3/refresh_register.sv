@@ -15,7 +15,7 @@
 //Date: November 2018													//
 //////////////////////////////////////////////////////////////////////////
 
-class load_mode_register;
+class refresh_register;
 
 randc logic [3:0]  trcar_d;
 randc logic [11:0] cfg_sdr_rfsh;
@@ -28,6 +28,8 @@ trcar_d >= 4'h2;
 cfg_sdr_rfsh >= 12'h100;
 cfg_sdr_rfsh <= 12'hC35;
 cfg_sdr_rfmax >= 3'h1;
-cfg_sdr_rfmax <= 3'hf;
+cfg_sdr_rfmax <= 3'h7;
 
 }
+
+endclass 

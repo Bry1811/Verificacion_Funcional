@@ -42,7 +42,7 @@ class driver;
 	//--------------------------------------------
 	// New function to create a driver block
 	//--------------------------------------------
-		function new(virtual bus_interface driver_interface,scoreboard new_scoreboard_ext, stimulus1 ext_stimulus1, stimulus2 ext_stimulus2,stimulus3 ext_stimulus3
+		function new(virtual bus_interface driver_interface,scoreboard new_scoreboard_ext, stimulus1 ext_stimulus1, stimulus2 ext_stimulus2,stimulus3 ext_stimulus3,
 						load_mode_register new_load_mode_register_ext, refresh_register new_refresh_register_ext);
 			begin
 			this.driver_interface = driver_interface;

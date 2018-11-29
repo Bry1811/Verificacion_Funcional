@@ -27,3 +27,5 @@ cas_latency <= 3'h3;
 cas_latency >= 3'h2;
 
 }
+
+endclass 

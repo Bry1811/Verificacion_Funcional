@@ -34,15 +34,12 @@
 class environment2 extends environment;
 
 	virtual bus_interface environment2_interface;
-	virtual whitebox whitebox_interface;
 
 	//function new(virtual bus_interface environment2_interface,virtual whitebox whitebox_interface);
 	function new(virtual bus_interface environment2_interface);
 	begin
 		this.environment2_interface = environment2_interface;
-		//this.whitebox_interface = whitebox_interface;
 		super.new(environment2_interface);
-
 	end
 	endfunction
 

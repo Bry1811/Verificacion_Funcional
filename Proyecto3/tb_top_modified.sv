@@ -135,7 +135,7 @@ whitebox whitebox_interface();
           .sdr_init_done      (main_interface.sdr_init_done      ),
           .cfg_req_depth      (2'h3               ),	        //how many req. buffer should hold
           .cfg_sdr_en         (1'b1               ),
-          //.cfg_sdr_mode_reg   (13'h033            ),
+          //.cfg_sdr_mode_reg   (13'h033            ), 0 0000 0011 0011
 		  .cfg_sdr_mode_reg   ({4'h0,2'h0,main_interface.cas_latency,1'h0,main_interface.burst_length}            ),
           .cfg_sdr_tras_d     (4'h4               ),
           .cfg_sdr_trp_d      (4'h2               ),

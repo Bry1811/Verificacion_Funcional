@@ -3,7 +3,6 @@
 //																		//
 //Authors:																//
 //		Bryan Gomez														//
-//		Oscar Segura                                                    //
 //		Edgar Solera													//
 // 																		//
 //Curse: Functional Verification										//
@@ -27,19 +26,21 @@
 `include "stimulus1.sv"
 `include "stimulus2.sv"
 `include "stimulus3.sv"
+`include "load_mode_register.sv"
+`include "refresh_register.sv"
 `include "driver.sv"
 `include "environment.sv"
-//`include "assertion.sv"
 
 class environment2 extends environment;
 
 	virtual bus_interface environment2_interface;
 	virtual whitebox whitebox_interface;
 
-	function new(virtual bus_interface environment2_interface,virtual whitebox whitebox_interface);
+	//function new(virtual bus_interface environment2_interface,virtual whitebox whitebox_interface);
+	function new(virtual bus_interface environment2_interface);
 	begin
 		this.environment2_interface = environment2_interface;
-		this.whitebox_interface = whitebox_interface;
+		//this.whitebox_interface = whitebox_interface;
 		super.new(environment2_interface);
 
 	end

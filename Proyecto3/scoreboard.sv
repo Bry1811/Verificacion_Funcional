@@ -3,7 +3,6 @@
 //																		//
 //Authors:																//
 //		Bryan Gomez														//
-//		Oscar Segura                                                    //
 //		Edgar Solera													//
 // 																		//
 //Curse: Functional Verification										//
@@ -60,7 +59,7 @@ class scoreboard;
 			else
 			begin			
 				param_random = $urandom_range(0,1);
-				//param_random = 1;
+				param_random = 0;
 				$display("Random Parameter for Scoreboard Writing: %d ",param_random);
 				if(param_random == 1)
 				begin
@@ -96,7 +95,7 @@ class scoreboard;
 			$display("Random Parameter for Scoreboard Reading: %d ",param_random);
 			if(param_random == 1)
 			begin
-				size_fifo = $urandom_range(0,size_array-1);
+				size_fifo = $urandom_range(0,order_size_write-1);
 				fifo_size = size_fifo;
 				Address = afifo[size_fifo];
 				bl = bfifo[size_fifo];

@@ -3,7 +3,6 @@
 //																		//
 //Authors:																//
 //		Bryan Gomez														//
-//		Oscar Segura                                                    //
 //		Edgar Solera													//
 // 																		//
 //Curse: Functional Verification										//

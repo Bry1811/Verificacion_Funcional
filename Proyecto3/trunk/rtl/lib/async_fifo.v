@@ -304,15 +304,13 @@ endfunction
 
 // synopsys translate_off
 
-
-
-assert property (@(posedge wr_clk) (!(wr_en && full))) 
+assert property (@(posedge wr_clk)  disable iff (!(wr_reset_n)) (!(wr_en && full))) 
      else begin
       $error($time, "%m Error! afifo overflow!");
       //$stop;
       end
     
-assert property (@(posedge rd_clk) (!(rd_en && empty))) 
+assert property (@(posedge rd_clk) disable iff (!(rd_reset_n)) (!(rd_en && empty))) 
       else begin
       $error($time, "%m error! afifo underflow!");
       //$stop;

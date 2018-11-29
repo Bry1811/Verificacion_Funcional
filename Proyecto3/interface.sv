@@ -3,7 +3,6 @@
 //																		//
 //Authors:																//
 //		Bryan Gomez														//
-//		Oscar Segura                                                    //
 //		Edgar Solera													//
 // 																		//
 //Curse: Functional Verification										//
@@ -57,4 +56,21 @@ interface bus_interface #(dw=32)(input sys_clk, input sdram_clk);
 	//Additional signals used for different verification blocks
 	reg 			RESETN;
 	reg   [31:0]    ErrCnt;
+	reg page_overflow;
+	
+	//--------------------------------------------
+	// Load Mode Register Signals
+	//--------------------------------------------
+	
+	reg [2:0] burst_length;
+	reg [2:0] cas_latency ;
+	
+	//--------------------------------------------
+	// Refresh Register Signals
+	//--------------------------------------------
+	reg [3:0]  trcar_d;
+	reg [11:0] cfg_sdr_rfsh;
+	reg [2:0] cfg_sdr_rfmax;
+	
+	
 endinterface

@@ -7,28 +7,27 @@
 // 																		//
 //Curse: Functional Verification										//
 //																		//
-//Module Description:  Class to create random writing in SDRAM creating //
-//					   row, column and burst 							//
+//Module Description:  Class to create a register for necessary 	    //
+// 					   variables for AutoRefresh						//
 //					   													//
-//Details: Constrains range limits the burst variable					//
+//Details: Constrains range limits the random variables					//
 //																		//
 //Date: November 2018													//
 //////////////////////////////////////////////////////////////////////////
 
-//----------------------------------------
-  // Address Decoding:
-  //  with cfg_col bit configured as: 00
-  //    <12 Bit Row> <2 Bit Bank> <8 Bit Column> <2'b00>
-  //
+class load_mode_register;
 
-class stimulus3;
-
-rand logic [7:0] column;
-rand logic [7:0]  bl;
+randc logic [3:0]  trcar_d;
+randc logic [11:0] cfg_sdr_rfsh;
+randc logic [2:0] cfg_sdr_rfmax;
 
 constraint range {
-bl <= 8'h07;
-bl > 8'h00; 
-}
 
-endclass
+trcar_d <= 4'hf;
+trcar_d >= 4'h2;
+cfg_sdr_rfsh >= 12'h100;
+cfg_sdr_rfsh <= 12'hC35;
+cfg_sdr_rfmax >= 3'h1;
+cfg_sdr_rfmax <= 3'hf;
+
+}

@@ -3,7 +3,6 @@
 //																		//
 //Authors:																//
 //		Bryan Gomez														//
-//		Oscar Segura                                                    //
 //		Edgar Solera													//
 // 																		//
 //Curse: Functional Verification										//
@@ -31,6 +30,8 @@ class driver;
 	stimulus1 new_stimulus1;
 	stimulus2 new_stimulus2;
 	stimulus3 new_stimulus3;
+	load_mode_register new_load_mode_register;
+	refresh_register new_refresh_register;	
 
 	//--------------------------------------------
 	// Signals for task Burst Write
@@ -41,13 +42,16 @@ class driver;
 	//--------------------------------------------
 	// New function to create a driver block
 	//--------------------------------------------
-		function new(virtual bus_interface driver_interface,scoreboard new_scoreboard_ext, stimulus1 ext_stimulus1, stimulus2 ext_stimulus2, stimulus3 ext_stimulus3);
+		function new(virtual bus_interface driver_interface,scoreboard new_scoreboard_ext, stimulus1 ext_stimulus1, stimulus2 ext_stimulus2,stimulus3 ext_stimulus3
+						load_mode_register new_load_mode_register_ext, refresh_register new_refresh_register_ext);
 			begin
 			this.driver_interface = driver_interface;
 			this.new_scoreboard = new_scoreboard_ext;
 			this.new_stimulus1 = ext_stimulus1;
 			this.new_stimulus2 = ext_stimulus2;
 			this.new_stimulus3 = ext_stimulus3;
+			this.new_load_mode_register = new_load_mode_register_ext;
+			this.new_refresh_register = new_refresh_register_ext;
 			end
 		endfunction
 	
@@ -121,7 +125,7 @@ class driver;
 	//------------------------------------------------------------
 	task burst_write_page_crossover();
 		void'(new_stimulus1.randomize());
-		burst_write({new_stimulus1.row,new_stimulus1.bank,new_stimulus1.column,2'b00},new_stimulus1.bl);
+		burst_write({8'h00,new_stimulus1.row,new_stimulus1.bank,new_stimulus1.column,2'b00},new_stimulus1.bl);
 	endtask
 	
 	//--------------------------------------------
@@ -129,7 +133,7 @@ class driver;
 	//--------------------------------------------
 	task burst_write_random();
 		void'(new_stimulus2.randomize());
-		this.burst_write({new_stimulus2.row[7:0],new_stimulus2.bank,new_stimulus2.column[7:0],2'b00},new_stimulus2.bl);
+		this.burst_write({8'h00,new_stimulus2.row[7:0],new_stimulus2.bank,new_stimulus2.column[7:0],2'b00},new_stimulus2.bl);
 	endtask
 	
 	//---------------------------------------------------------------
@@ -137,6 +141,24 @@ class driver;
 	//---------------------------------------------------------------
 	task burst_write_random_column(logic [11:0] row, logic [1:0] bank);
 		void'(new_stimulus3.randomize());
-		this.burst_write({row,bank,new_stimulus3.column,2'b00},new_stimulus3.bl);
+		this.burst_write({8'h00,row,bank,new_stimulus3.column,2'b00},new_stimulus3.bl);
 	endtask
+	
+	//---------------------------------------------------------------
+	// Write in the Load Mode Register
+	//---------------------------------------------------------------
+	task write_load_mode_reg();
+		void'(new_load_mode_register.randomize());
+		driver_interface.burst_length=new_load_mode_register.burst_length;
+		driver_interface.cas_latency=new_load_mode_register.cas_latency;
+	endtask
+	
+	task write_refresh_reg();
+		void'(new_refresh_register.randomize());
+		driver_interface.trcar_d=new_refresh_register.trcar_d;
+		driver_interface.cfg_sdr_rfsh=new_refresh_register.cfg_sdr_rfsh;
+		driver_interface.cfg_sdr_rfmax=new_refresh_register.cfg_sdr_rfmax;
+	endtask
+	
+	
 endclass

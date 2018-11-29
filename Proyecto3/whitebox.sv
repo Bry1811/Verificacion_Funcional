@@ -3,7 +3,6 @@
 //																		//
 //Authors:																//
 //		Bryan Gomez														//
-//		Oscar Segura                                                    //
 //		Edgar Solera													//
 // 																		//
 //Curse: Functional Verification										//
@@ -30,7 +29,7 @@ interface whitebox();
 	logic [2:0] cfg_sdr_cas;
 	logic [11:0] cfg_sdr_rfsh;
 	logic x2b_refresh;
-	logic	[7:0] dq;
+	logic [7:0] dq;
 	logic page_ovflw;
 	logic [2:0]  rfsh_row_cnt;
 	logic [11:0]  rfsh_timer;
@@ -55,7 +54,7 @@ interface whitebox();
 	assign rd_valid = `DUT.app_rd_valid;
 	assign cfg_sdr_cas = `DUT.cfg_sdr_cas;
 	assign cfg_sdr_rfsh = `DUT.cfg_sdr_rfsh;
-	assign x2b_refresh = `DUT.u_xfr_ctl.x2b_refresh;
+	assign x2b_refresh = `DUT.u_xfr_ctl.x2b_refresh; // We did a refresh
 	assign page_ovflw =`DUT.u_req_gen.page_ovflw;
 	assign dq = tb_top.u_sdram16.dq;
   	assign rfsh_row_cnt = `DUT.u_xfr_ctl.rfsh_row_cnt;

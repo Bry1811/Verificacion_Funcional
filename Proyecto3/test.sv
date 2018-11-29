@@ -3,7 +3,6 @@
 //																		//
 //Authors:																//
 //		Bryan Gomez														//
-//		Oscar Segura                                                    //
 //		Edgar Solera													//
 // 																		//
 //Curse: Functional Verification										//
@@ -40,7 +39,9 @@ environment2 tb_environment;
 
 initial begin //{
   //Create a new environment for Validation and to call functions to initialize and write the SDRAM.
-  tb_environment=new(test_interface,test_whitebox);
+  //tb_environment=new(test_interface,test_whitebox);
+  tb_environment=new(test_interface);
+  
   //Callback of the Reset task in Driver Class
   tb_environment.tb_driver.Reset();
 

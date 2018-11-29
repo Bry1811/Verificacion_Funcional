@@ -3,7 +3,6 @@
 //																		//
 //Authors:																//
 //		Bryan Gomez														//
-//		Oscar Segura                                                    //
 //		Edgar Solera													//
 // 																		//
 //Curse: Functional Verification										//
@@ -29,6 +28,8 @@ class environment;
 	stimulus1 tb_stimulus1;
 	stimulus2 tb_stimulus2;
 	stimulus3 tb_stimulus3;
+	load_mode_register tb_load_mode_register;
+	refresh_register tb_refresh_register;
 
 	virtual bus_interface environment_interface;
 
@@ -39,8 +40,10 @@ class environment;
 		this.tb_stimulus1=new();
 		this.tb_stimulus2=new();
 		this.tb_stimulus3=new();
+		this.tb_load_mode_register=new();
+		this.tb_refresh_register=new();
 		this.tb_monitor=new(this.environment_interface,this.tb_scoreboard);
-		this.tb_driver=new(this.environment_interface,this.tb_scoreboard,this.tb_stimulus1,this.tb_stimulus2,this.tb_stimulus3);
+		this.tb_driver=new(this.environment_interface,this.tb_scoreboard,this.tb_stimulus1,this.tb_stimulus2,this.tb_stimulus3,this.tb_load_mode_register,this.tb_refresh_register);
 	end
 	endfunction
 

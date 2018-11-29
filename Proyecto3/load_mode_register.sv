@@ -7,28 +7,23 @@
 // 																		//
 //Curse: Functional Verification										//
 //																		//
-//Module Description:  Class to create random writing in SDRAM creating //
-//					   row, column and burst 							//
+//Module Description:  Class to create a register for necessary		    //
+// 					   variables for Programmable CAS latency 			//
 //					   													//
-//Details: Constrains range limits the burst variable					//
+//Details: Constrains range limits the random variables					//
 //																		//
 //Date: November 2018													//
 //////////////////////////////////////////////////////////////////////////
 
-//----------------------------------------
-  // Address Decoding:
-  //  with cfg_col bit configured as: 00
-  //    <12 Bit Row> <2 Bit Bank> <8 Bit Column> <2'b00>
-  //
+class load_mode_register;
 
-class stimulus3;
-
-rand logic [7:0] column;
-rand logic [7:0]  bl;
+randc logic [2:0] burst_length;
+randc logic [2:0] cas_latency ;
 
 constraint range {
-bl <= 8'h07;
-bl > 8'h00; 
-}
+burst_length <= 3'h3;
+burst_length >= 3'h2;
+cas_latency <= 3'h3;
+cas_latency >= 3'h2;
 
-endclass
+}

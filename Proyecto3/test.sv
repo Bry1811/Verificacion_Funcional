@@ -30,6 +30,7 @@ program test(bus_interface test_interface, whitebox test_whitebox);
 
 reg [31:0] read_data;
 int k;
+int temp_error;
 reg [31:0] StartAddr;
 
 environment2 tb_environment;
@@ -162,11 +163,12 @@ initial begin //{
   $display("---------------------------------------------------");
   $display(" Case: 7 Random write and read with different CAS Latency");
   $display("---------------------------------------------------");
-  tb_environment.tb_driver.Reset();
   for(k=0; k < 5; k++) begin
-	void'(tb_environment.tb_driver.tb_load_mode_register.randomize(cas_latency));
-	test_interface.cas_latency = tb_environment.tb_driver.tb_load_mode_register.cas_latency;
-	//tb_environment.tb_driver.Reset();
+	void'(tb_environment.tb_driver.new_load_mode_register.randomize(cas_latency));
+	test_interface.cas_latency = tb_environment.tb_driver.new_load_mode_register.cas_latency;
+	temp_error = test_interface.ErrCnt;
+	tb_environment.tb_driver.Reset();
+	test_interface.ErrCnt = temp_error;
 	tb_environment.tb_driver.burst_write_page_crossover();
 	tb_environment.tb_driver.burst_write_random();   	
 	tb_environment.tb_monitor.burst_read(); 
@@ -185,9 +187,11 @@ initial begin //{
   $display("---------------------------------------------------");
   $display(" Case: 8 Random write and read with different refresh settings");
   $display("---------------------------------------------------");
-  tb_environment.tb_driver.Reset();
   for(k=0; k < 5; k++) begin
 	tb_environment.tb_driver.write_refresh_reg();
+	temp_error = test_interface.ErrCnt;
+	tb_environment.tb_driver.Reset();
+	test_interface.ErrCnt = temp_error;
 	
 	wait(test_whitebox.x2b_refresh == 1);
 	tb_environment.tb_driver.burst_write_page_crossover();
@@ -198,6 +202,13 @@ initial begin //{
 	tb_environment.tb_monitor.burst_read();
   end
   
+  $display("###############################");
+    if(test_interface.ErrCnt == 0)
+        $display("STATUS: SDRAM Write/Read TEST PASSED for Case 8");
+    else
+        $display("ERROR:  SDRAM Write/Read TEST FAILED for Case 8");
+        $display("###############################");
+  
   
   #10000
   $display("---------------------------------------------------");
@@ -207,6 +218,9 @@ initial begin //{
   for(k=0; k < 5; k++) begin
 	tb_environment.tb_driver.write_load_mode_reg();
 	tb_environment.tb_driver.write_refresh_reg();
+	temp_error = test_interface.ErrCnt;
+	tb_environment.tb_driver.Reset();
+	test_interface.ErrCnt = temp_error;
 	
 	wait(test_whitebox.x2b_refresh == 1);
 	tb_environment.tb_driver.burst_write_page_crossover();

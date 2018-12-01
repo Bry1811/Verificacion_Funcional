@@ -140,12 +140,15 @@ whitebox whitebox_interface();
           .cfg_sdr_tras_d     (4'h4               ),
           .cfg_sdr_trp_d      (4'h2               ),
           .cfg_sdr_trcd_d     (4'h2               ),
-          .cfg_sdr_cas        (3'h3               ),
-          .cfg_sdr_trcar_d    (4'h7               ),
+          //.cfg_sdr_cas        (3'h3               ),
+		  .cfg_sdr_cas        (main_interface.cas_latency			),
+          //.cfg_sdr_trcar_d    (4'h7               ),
+		  .cfg_sdr_trcar_d    (main_interface.trcar_d             ),
           .cfg_sdr_twr_d      (4'h1               ),
-          .cfg_sdr_rfsh       (12'h100            ), // reduced from 12'hC35
-          .cfg_sdr_rfmax      (3'h6               )
-
+          //.cfg_sdr_rfsh       (12'h100            ), // reduced from 12'hC35
+		  .cfg_sdr_rfsh       (main_interface.cfg_sdr_rfsh           ),
+          //.cfg_sdr_rfmax      (3'h6               )
+		  .cfg_sdr_rfmax      (main_interface.cfg_sdr_rfmax            )
 );
 
 

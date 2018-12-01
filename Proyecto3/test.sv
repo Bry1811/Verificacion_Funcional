@@ -42,9 +42,11 @@ initial begin //{
   //tb_environment=new(test_interface,test_whitebox);
   tb_environment=new(test_interface);
   
-  //Callback of the Reset task in Driver Class
+  //Callback of the Reset task in Driver Class and for the Regs
+  tb_environment.tb_driver.write_load_mode_reg();
+  tb_environment.tb_driver.write_refresh_reg();
   tb_environment.tb_driver.Reset();
-
+  
   #1000;
   $display("-------------------------------------- ");
   $display(" Case-1: Single Write/Read Case        ");
@@ -64,69 +66,26 @@ initial begin //{
   tb_environment.tb_monitor.burst_read();  
   tb_environment.tb_driver.burst_write(32'h0040_0000,8'h5);  
   tb_environment.tb_monitor.burst_read();  
+  
   $display("----------------------------------------");
   $display(" Case-3 Create a Page Cross Over        ");
   $display("----------------------------------------");
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();  
-  tb_environment.tb_driver.burst_write_page_crossover();   
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
+  for(k=0; k < 5; k++) begin
+	tb_environment.tb_driver.burst_write_page_crossover();  
+  end
+  for(k=0; k < 10; k++) begin
+	tb_environment.tb_monitor.burst_read();   
+  end  
 
   $display("----------------------------------------");
   $display(" Case:4 4 Write & 4 Read                ");
   $display("----------------------------------------");
-  tb_environment.tb_driver.burst_write_random();  
-  tb_environment.tb_driver.burst_write_random();  
-  tb_environment.tb_driver.burst_write_random();  
-  tb_environment.tb_driver.burst_write_random();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
+  for(k=0; k < 4; k++) begin
+	tb_environment.tb_driver.burst_write_random();   
+  end  
+  for(k=0; k < 4; k++) begin
+	tb_environment.tb_monitor.burst_read();   
+  end  
 
   $display("---------------------------------------");
   $display(" Case:5 24 Write & 24 Read With Different Bank and Row ");
@@ -144,14 +103,9 @@ initial begin //{
   tb_environment.tb_driver.burst_write_random_column(12'h001,2'b01);   // Row: 1 Bank : 1
   tb_environment.tb_driver.burst_write_random_column(12'h001,2'b10);   // Row: 1 Bank : 2
   tb_environment.tb_driver.burst_write_random_column(12'h001,2'b11);   // Row: 1 Bank : 3
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
+  for(k=0; k < 8; k++) begin
+	tb_environment.tb_monitor.burst_read();   
+  end   
 
   tb_environment.tb_driver.burst_write_random_column(12'h002,2'b00);   // Row: 2 Bank : 0
   tb_environment.tb_driver.burst_write_random_column(12'h002,2'b01);   // Row: 2 Bank : 1
@@ -162,14 +116,9 @@ initial begin //{
   tb_environment.tb_driver.burst_write_random_column(12'h003,2'b10);   // Row: 3 Bank : 2
   tb_environment.tb_driver.burst_write_random_column(12'h003,2'b11);   // Row: 3 Bank : 3
 
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
+  for(k=0; k < 8; k++) begin
+	tb_environment.tb_monitor.burst_read();   
+  end   
 
   tb_environment.tb_driver.burst_write_random_column(12'h002,2'b00);   // Row: 2 Bank : 0
   tb_environment.tb_driver.burst_write_random_column(12'h002,2'b01);   // Row: 2 Bank : 1
@@ -180,14 +129,10 @@ initial begin //{
   tb_environment.tb_driver.burst_write_random_column(12'h003,2'b10);   // Row: 3 Bank : 2
   tb_environment.tb_driver.burst_write_random_column(12'h003,2'b11);   // Row: 3 Bank : 3
 
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read();  
-  tb_environment.tb_monitor.burst_read(); 
+  for(k=0; k < 8; k++) begin
+	tb_environment.tb_monitor.burst_read();   
+  end 
+  
   $display("---------------------------------------------------");
   $display(" Case: 6 Random 2 write and 2 read random");
   $display("---------------------------------------------------");
@@ -204,15 +149,85 @@ initial begin //{
      tb_environment.tb_monitor.burst_read();  
  #100;
   end
-
-  #10000;
+ #10000;
 
         $display("###############################");
     if(test_interface.ErrCnt == 0)
-        $display("STATUS: SDRAM Write/Read TEST PASSED");
+        $display("STATUS: SDRAM Write/Read TEST PASSED for Cases 1-6");
     else
-        $display("ERROR:  SDRAM Write/Read TEST FAILED");
+        $display("ERROR:  SDRAM Write/Read TEST FAILED for Cases 1-6");
         $display("###############################");
+	
+ #10000
+  $display("---------------------------------------------------");
+  $display(" Case: 7 Random write and read with different CAS Latency");
+  $display("---------------------------------------------------");
+  tb_environment.tb_driver.Reset();
+  for(k=0; k < 5; k++) begin
+	void'(tb_environment.tb_driver.tb_load_mode_register.randomize(cas_latency));
+	test_interface.cas_latency = tb_environment.tb_driver.tb_load_mode_register.cas_latency;
+	//tb_environment.tb_driver.Reset();
+	tb_environment.tb_driver.burst_write_page_crossover();
+	tb_environment.tb_driver.burst_write_random();   	
+	tb_environment.tb_monitor.burst_read(); 
+	tb_environment.tb_driver.burst_write_page_crossover();
+	tb_environment.tb_driver.burst_write_random(); 
+	tb_environment.tb_monitor.burst_read(); 
+  end 
+  $display("###############################");
+    if(test_interface.ErrCnt == 0)
+        $display("STATUS: SDRAM Write/Read TEST PASSED for Case 7");
+    else
+        $display("ERROR:  SDRAM Write/Read TEST FAILED for Case 7");
+        $display("###############################");
+  
+   #10000
+  $display("---------------------------------------------------");
+  $display(" Case: 8 Random write and read with different refresh settings");
+  $display("---------------------------------------------------");
+  tb_environment.tb_driver.Reset();
+  for(k=0; k < 5; k++) begin
+	tb_environment.tb_driver.write_refresh_reg();
+	
+	wait(test_whitebox.x2b_refresh == 1);
+	tb_environment.tb_driver.burst_write_page_crossover();
+	tb_environment.tb_driver.burst_write_random();  
+	
+	wait(test_whitebox.x2b_refresh == 1);
+	tb_environment.tb_monitor.burst_read();
+	tb_environment.tb_monitor.burst_read();
+  end
+  
+  
+  #10000
+  $display("---------------------------------------------------");
+  $display(" Case: 9 Random write and read with different Registers settings");
+  $display("---------------------------------------------------");
+  tb_environment.tb_driver.Reset();
+  for(k=0; k < 5; k++) begin
+	tb_environment.tb_driver.write_load_mode_reg();
+	tb_environment.tb_driver.write_refresh_reg();
+	
+	wait(test_whitebox.x2b_refresh == 1);
+	tb_environment.tb_driver.burst_write_page_crossover();
+	tb_environment.tb_driver.burst_write_random();  
+	tb_environment.tb_driver.burst_write_random();
+	tb_environment.tb_driver.burst_write_page_crossover();
+	
+	wait(test_whitebox.x2b_refresh == 1);
+	tb_environment.tb_monitor.burst_read();
+	tb_environment.tb_monitor.burst_read();
+	tb_environment.tb_monitor.burst_read();
+	tb_environment.tb_monitor.burst_read();
+  end 
+  $display("###############################");
+    if(test_interface.ErrCnt == 0)
+        $display("STATUS: SDRAM Write/Read TEST PASSED for Case 9");
+    else
+        $display("ERROR:  SDRAM Write/Read TEST FAILED for Case 9");
+        $display("###############################");
+  
+  #10000;
 
     $finish;
 end

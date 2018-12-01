@@ -21,7 +21,7 @@ class scoreboard;
 //-------------------------------------
 	integer param_random;
 	integer size_fifo;
-	parameter size_array = 100;
+	parameter size_array = 1000;
 	integer order_size_write;
 	integer order_size_read;
 	integer num_bl;

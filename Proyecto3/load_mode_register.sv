@@ -25,7 +25,6 @@ burst_length <= 3'h3;
 burst_length >= 3'h2;
 cas_latency <= 3'h3;
 cas_latency >= 3'h2;
-
 }
 
 endclass 

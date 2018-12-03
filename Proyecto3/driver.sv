@@ -153,6 +153,9 @@ class driver;
 		driver_interface.cas_latency=new_load_mode_register.cas_latency;
 	endtask
 	
+	//---------------------------------------------------------------
+	// Write in the Refresh Register
+	//---------------------------------------------------------------
 	task write_refresh_reg();
 		void'(new_refresh_register.randomize());
 		driver_interface.trcar_d=new_refresh_register.trcar_d;

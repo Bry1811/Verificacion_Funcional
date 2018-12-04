@@ -44,29 +44,27 @@ module assertions(whitebox whitebox);
 //--------------------------------------------
 
 sequence inhibit_or_nop;
-//CLK Period = 20 ns por tanto 100us / 20ns = 5000 ciclos
-	## [1:5000]  ((whitebox.cs) || (whitebox.ras && whitebox.cas && whitebox.we));// [*1:$];
+(whitebox.cs || (whitebox.ras && whitebox.cas && whitebox.we))[*10000] ;
 endsequence
 
 sequence precharge_init;
-	## [5000:5008] (~whitebox.cs & ~whitebox.ras & whitebox.cas & ~whitebox.we);
+	(~whitebox.cs & ~whitebox.ras & whitebox.cas & ~whitebox.we);
 endsequence
 
 sequence auto_refresh;
-	(~whitebox.cs && ~whitebox.ras && ~whitebox.cas && whitebox.we )[=2];
+	(~whitebox.cs && ~whitebox.ras && ~whitebox.cas && whitebox.we);
 endsequence
-
 sequence load_mode_reg;
-	(~whitebox.cs && ~whitebox.ras && ~whitebox.cas && ~whitebox.we ) [=1];
+	(~whitebox.cs && ~whitebox.ras && ~whitebox.cas && ~whitebox.we );
 endsequence
 
-sequence rule335_seq;
+sequence antecendente_rule335_seq;
 	(whitebox.cyc_o && whitebox.stb_o);
 endsequence
 
 property rule300_prop;
   @ (posedge whitebox.sys_clk) 
-      whitebox.reset  |=> (!$isunknown(whitebox.cs) and !$isunknown(whitebox.we) and !$isunknown(whitebox.ras) and !$isunknown(whitebox.cas));
+      whitebox.reset  |=> (whitebox.cs and whitebox.we and whitebox.ras and whitebox.cas);
 endproperty
 
 property rule305_prop;
@@ -81,12 +79,16 @@ endproperty
 
 property rule335_prop;
 	@ (posedge whitebox.sys_clk) 
-		$rose(whitebox.ack_o)   |=> rule335_seq;	
+		antecendente_rule335_seq|=> whitebox.ack_o;	
 endproperty
 	
 property initialization;
-	@(posedge whitebox.clk)
-		$fell(whitebox.reset_n) |=> (inhibit_or_nop and precharge_init) |=> auto_refresh |=> load_mode_reg; 
+	@(posedge whitebox.sys_clk)
+		$fell(whitebox.reset_n) |=> inhibit_or_nop ##3 precharge_init ##8 auto_refresh 
+		##10 auto_refresh ##10 auto_refresh ##10 auto_refresh ##10 auto_refresh ##10 auto_refresh 
+		##10 auto_refresh ##10 auto_refresh ##10 auto_refresh ##10 auto_refresh ##10 auto_refresh 
+		##10 auto_refresh ##10 auto_refresh ##10 auto_refresh ##10 auto_refresh ##10 load_mode_reg 
+		##18 whitebox.sdr_init_done;  
 endproperty
 
 assertion_initialization: assert property (initialization) $display( "%t: SDRAM initialization has done successfully!!", $time);

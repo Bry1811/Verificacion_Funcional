@@ -42,6 +42,7 @@ interface whitebox();
 	logic cyc_o;
 	logic stb_o;
 	logic ack_o;
+	logic sdr_init_done;
 
 	assign cke = `DUT.sdr_cke;
 	assign cs = `DUT.sdr_cs_n;
@@ -67,5 +68,5 @@ interface whitebox();
 	assign cyc_o = tb_top.u_dut.wb_cyc_i;
 	assign stb_o = tb_top.u_dut.wb_stb_i;
 	assign ack_o = tb_top.u_dut.wb_ack_o;	
-	
+	assign sdr_init_done = 	tb_top.u_dut.sdr_init_done;
 endinterface

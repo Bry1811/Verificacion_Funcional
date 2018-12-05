@@ -43,7 +43,9 @@ interface whitebox();
 	logic stb_o;
 	logic ack_o;
 	logic sdr_init_done;
+	logic dataout_en;
 
+	assign dataout_en= tb_top.u_sdram16.Data_out_enable;
 	assign cke = `DUT.sdr_cke;
 	assign cs = `DUT.sdr_cs_n;
 	assign ras = `DUT.sdr_ras_n;

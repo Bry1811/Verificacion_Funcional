@@ -37,7 +37,7 @@ module assertions(whitebox whitebox);
 //-------------------------------------------	
 //COMMAND INHIBIT  	||  H  |  X  |  X  |  X  |
 //NOP              	||  L  |  H  |  H  |  H  |
-//ACTIVE		||  L  |  L  |  H  |  H  |
+//ACTIVE		    ||  L  |  L  |  H  |  H  |
 //AUTO_REFRESH     	||  L  |  L  |  L  |  H  |
 //PRECHARGE        	||  L  |  L  |  H  |  L  |
 //LOAD_MOD_REG     	||  L  |  L  |  L  |  L  |
@@ -55,12 +55,56 @@ sequence auto_refresh;
 	(~whitebox.cs && ~whitebox.ras && ~whitebox.cas && whitebox.we);
 endsequence
 sequence load_mode_reg;
-	(~whitebox.cs && ~whitebox.ras && ~whitebox.cas && ~whitebox.we );
+	(~whitebox.cs && ~whitebox.ras && ~whitebox.cas && ~whitebox.we);
 endsequence
 
 sequence antecendente_rule335_seq;
 	(whitebox.cyc_o && whitebox.stb_o);
 endsequence
+
+/*----------------------------------------------------------------------------*/
+/*------------------------Aserciones de Cas Latency-----------------------------------*/
+/*----------------------------------------------------------------------------*/
+sequence operacion_Lectura;
+	(~whitebox.cs && whitebox.ras && !whitebox.cas && whitebox.we);
+endsequence
+
+property Cas_latency_2_memoria;
+  @(posedge whitebox.clk) 
+  disable iff(whitebox.cfg_sdr_cas!=2)
+   operacion_Lectura |-> ##2 whitebox.dataout_en;
+endproperty
+
+property Cas_latency_2_wishbone;
+  @(posedge whitebox.clk) 
+  disable iff(whitebox.cfg_sdr_cas!=2)
+   operacion_Lectura |-> ##2 whitebox.dataout_en ##2 whitebox.rd_valid;
+endproperty
+
+property Cas_latency_3_memoria;
+  @(posedge whitebox.clk) 
+  disable iff(whitebox.cfg_sdr_cas!=3)
+   operacion_Lectura |-> ##3 whitebox.dataout_en;
+endproperty
+
+property Cas_latency_3_wishbone;
+  @(posedge whitebox.clk) 
+  disable iff(whitebox.cfg_sdr_cas!=3)
+   operacion_Lectura |-> ##3 whitebox.dataout_en ##2 whitebox.rd_valid;
+endproperty
+
+assert_Cas_latency_2_memoria: assert property (Cas_latency_2_memoria) $display( "%t:Cas_latency_2_memoria successfully", $time);
+else $error("Cas_latency_2_memoria has failed!");
+
+assert_Cas_latency_3_memoria: assert property (Cas_latency_3_memoria) $display( "%t:Cas_latency_3_memoria successfully", $time);
+else $error("Cas_latency_3_memoria has failed!");
+
+assert_Cas_latency_2_wishbone: assert property (Cas_latency_2_wishbone) $display( "%t:Cas_latency_2_wishbone successfully", $time);
+else $error("Cas_latency_2_wishbone has failed!");
+
+assert_Cas_latency_3_wishbone: assert property (Cas_latency_3_wishbone) $display( "%t:Cas_latency_3_wishbone successfully", $time);
+else $error("Cas_latency_3_wishbone has failed!");
+
 
 property rule300_prop;
   @ (posedge whitebox.sys_clk) 

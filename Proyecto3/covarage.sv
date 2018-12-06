@@ -22,20 +22,21 @@
 // These "include"  is needed to define a previous module compilation.
 //************************************************************************
 module covarage(whitebox whitebox);
-//	virtual bus_interface driver_interface;
-//	virtual whitebox internal_signals;
-//	function new(virtual bus_interface driver_interface,virtual whitebox internal_signals);
-//			begin
-//			this.driver_interface = driver_interface;
-//			this.internal_signals= internal_signals;
-//			end
-//		endfunction
-	logic lectura = (~whitebox.cs && whitebox.ras && ~whitebox.cas && whitebox.we) ;
+	logic lectura;
+	logic Autorefresh;
+	assign lectura=(~whitebox.cs && whitebox.ras && ~whitebox.cas && whitebox.we);
+	assign Autorefresh=(~whitebox.cs && ~whitebox.ras && ~whitebox.cas && whitebox.we);
 	covergroup programable_latency @(posedge lectura);
 		cas_latency : coverpoint whitebox.Mode_register_cas {
 			bins two ={2};
 			bins three ={3};
 		}
-	   	
 	endgroup : programable_latency
+	covergroup Auto_refresh_latency @(posedge Autorefresh);
+		Autorefresh : coverpoint whitebox.autorefresh_latency{
+			bins posibles_valores = {[2:16]};
+		}
+	endgroup : Auto_refresh_latency
+	programable_latency lat=new();
+	Auto_refresh_latency lat_auto_refresh=new();
 endmodule : covarage

@@ -44,7 +44,11 @@ interface whitebox();
 	logic ack_o;
 	logic sdr_init_done;
 	logic dataout_en;
+	logic [2:0] Mode_register_cas;
+	logic [3:0] autorefresh_latency;
 
+	assign autorefresh_latency=tb_top.u_dut.cfg_sdr_trcar_d[3:0];
+	assign Mode_register_cas={tb_top.u_sdram16.Mode_reg[2],tb_top.u_sdram16.Mode_reg[1],tb_top.u_sdram16.Mode_reg[0]};
 	assign dataout_en= tb_top.u_sdram16.Data_out_enable;
 	assign cke = `DUT.sdr_cke;
 	assign cs = `DUT.sdr_cs_n;

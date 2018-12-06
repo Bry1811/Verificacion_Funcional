@@ -56,6 +56,7 @@
 `include "whitebox.sv"
 `include "assertion.sv"
 `include "test.sv"
+`include "covarage.sv"
 
 //`define SDR_16BIT 1
 
@@ -198,6 +199,8 @@ mt48lc8m8a2 #(.data_bits(8)) u_sdram8 (
 `endif
 
 assertions tb_assertion(whitebox_interface);
+
+covarage tb_covarage(whitebox_interface);
 
 test main_tb(main_interface,whitebox_interface);
 

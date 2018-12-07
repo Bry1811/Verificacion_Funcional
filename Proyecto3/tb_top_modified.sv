@@ -200,7 +200,7 @@ mt48lc8m8a2 #(.data_bits(8)) u_sdram8 (
 
 assertions tb_assertion(whitebox_interface);
 
-covarage tb_covarage(whitebox_interface);
+covarage tb_covarage(whitebox_interface,main_interface);
 
 test main_tb(main_interface,whitebox_interface);
 

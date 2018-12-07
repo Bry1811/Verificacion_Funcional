@@ -21,11 +21,15 @@
 // times definition for the same module.
 // These "include"  is needed to define a previous module compilation.
 //************************************************************************
-module covarage(whitebox whitebox);
+module covarage(whitebox whitebox,bus_interface test_interface);
 	logic lectura;
 	logic Autorefresh;
+	logic escritura;
+	logic Active;
+	assign escritura=(~whitebox.cs && whitebox.ras && ~whitebox.cas && ~whitebox.we);
 	assign lectura=(~whitebox.cs && whitebox.ras && ~whitebox.cas && whitebox.we);
 	assign Autorefresh=(~whitebox.cs && ~whitebox.ras && ~whitebox.cas && whitebox.we);
+	assign Active=(~whitebox.cs && ~whitebox.ras && whitebox.cas && whitebox.we);
 	covergroup programable_latency @(posedge lectura);
 		cas_latency : coverpoint whitebox.Mode_register_cas {
 			bins two ={2};
@@ -37,6 +41,13 @@ module covarage(whitebox whitebox);
 			bins posibles_valores = {[2:16]};
 		}
 	endgroup : Auto_refresh_latency
+	covergroup cross_page_refresh @(posedge test_interface.cross_page);
+		Autorefresh_lat : coverpoint whitebox.autorefresh_latency{
+			bins val = {[2:16]};
+		}
+	endgroup : cross_page_refresh
+	
 	programable_latency lat=new();
 	Auto_refresh_latency lat_auto_refresh=new();
+	cross_page_refresh crospage=new();
 endmodule : covarage

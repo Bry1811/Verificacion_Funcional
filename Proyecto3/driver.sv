@@ -90,11 +90,11 @@ class driver;
 	//--------------------------------------------
 	task burst_write(logic [31:0] Address, logic [7:0]  bl);
 	begin
+		driver_interface.rower=driver_interface.wb_addr_i[25:14];
+		driver_interface.prev_rower=driver_interface.wb_addr_i[25:14];
 		new_scoreboard.write_afifo_bfifo(Address,bl,size_fifo);
-	 
 		@ (negedge driver_interface.sys_clk);
 		$display("Write Address: %x, Burst Size: %d",Address,bl);
-
 		for(i=0; i < bl; i++) begin
 			driver_interface.wb_stb_i        = 1;
 			driver_interface.wb_cyc_i        = 1;
@@ -102,15 +102,23 @@ class driver;
 			driver_interface.wb_sel_i        = 4'b1111;
 			driver_interface.wb_addr_i       = Address[31:2]+i;
 			driver_interface.wb_dat_i        = $random & 32'hFFFFFFFF;
+			driver_interface.burst_initiante_write=1;
 			new_scoreboard.write_dfifo(driver_interface.wb_dat_i,i,size_fifo);
-
 			do begin
 				@ (posedge driver_interface.sys_clk);
 			end while(driver_interface.wb_ack_o == 1'b0);
 				@ (negedge driver_interface.sys_clk);
-	   
+	   	driver_interface.prev_rower=driver_interface.rower;
+	   	driver_interface.rower=driver_interface.wb_addr_i[25:14];
+	   	if((driver_interface.prev_rower!=driver_interface.rower)&&(driver_interface.prev_rower!=0))begin
+	   		driver_interface.cross_page=1;
+	   	end // if(prev_row!=row)
+	   	else begin
+	   		driver_interface.cross_page=0;
+	   	end
 			$display("Status: Burst-No: %d  Write Address: %x  WriteData: %x ",i,driver_interface.wb_addr_i,driver_interface.wb_dat_i);
 		end
+		driver_interface.burst_initiante_write=0;
 		driver_interface.wb_stb_i        = 0;
 		driver_interface.wb_cyc_i        = 0;
 		driver_interface.wb_we_i         = 'hx;
@@ -125,7 +133,7 @@ class driver;
 	//------------------------------------------------------------
 	task burst_write_page_crossover();
 		void'(new_stimulus1.randomize());
-		burst_write({8'h00,new_stimulus1.row,new_stimulus1.bank,new_stimulus1.column,2'b00},new_stimulus1.bl);
+		burst_write({8'h00,new_stimulus1.row,new_stimulus1.bank,11'hffc,2'b00},new_stimulus1.bl);
 	endtask
 	
 	//--------------------------------------------
@@ -160,7 +168,7 @@ class driver;
 		void'(new_refresh_register.randomize());
 		driver_interface.trcar_d=new_refresh_register.trcar_d;
 		driver_interface.cfg_sdr_rfsh=new_refresh_register.cfg_sdr_rfsh;
-		driver_interface.cfg_sdr_rfmax=new_refresh_register.cfg_sdr_rfmax;
+		driver_interface.cfg_sdr_rfmax=1;
 	endtask
 	
 	

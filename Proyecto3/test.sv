@@ -34,6 +34,7 @@ int temp_error;
 reg [31:0] StartAddr;
 
 environment2 tb_environment;
+//covarage covarage1=new(test_interface,test_whitebox);
 /////////////////////////////////////////////////////////////////////////
 // Test Case
 /////////////////////////////////////////////////////////////////////////
@@ -77,7 +78,7 @@ initial begin //{
   for(k=0; k < 10; k++) begin
 	tb_environment.tb_monitor.burst_read();   
   end  
-
+ 
   $display("----------------------------------------");
   $display(" Case:4 4 Write & 4 Read                ");
   $display("----------------------------------------");
@@ -209,7 +210,6 @@ initial begin //{
         $display("ERROR:  SDRAM Write/Read TEST FAILED for Case 8");
         $display("###############################");
   
-  
   #10000
   $display("---------------------------------------------------");
   $display(" Case: 9 Random write and read with different Registers settings");
@@ -243,7 +243,7 @@ initial begin //{
   
   #10000;
 
-    $finish;
+$finish;   
 end
 
 endprogram

@@ -56,8 +56,10 @@ interface bus_interface #(dw=32)(input sys_clk, input sdram_clk);
 	//Additional signals used for different verification blocks
 	reg 			RESETN;
 	reg   [31:0]    ErrCnt;
-	reg page_overflow;
-	
+	reg burst_initiante_write;
+	reg cross_page;
+	logic [11:0]rower;
+	logic [11:0]prev_rower;
 	//--------------------------------------------
 	// Load Mode Register Signals
 	//--------------------------------------------

@@ -66,7 +66,7 @@ endsequence
 /*------------------------Aserciones de Cas Latency-----------------------------------*/
 /*----------------------------------------------------------------------------*/
 sequence operacion_Lectura;
-	(~whitebox.cs && whitebox.ras && !whitebox.cas && whitebox.we);
+	(~whitebox.cs && whitebox.ras && ~whitebox.cas && whitebox.we);
 endsequence
 
 property Cas_latency_2_memoria;
